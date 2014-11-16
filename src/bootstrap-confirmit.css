@@ -10,7 +10,3 @@
 .confirmit-confirm.animated {
 	z-index: -1;
 }
-
-.animated {
-    animation-duration: 0.2s;
-}

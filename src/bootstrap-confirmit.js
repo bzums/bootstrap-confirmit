@@ -12,8 +12,10 @@
     Confirmit.DEFAULTS = {
         confirmBtnClassOnShow: 'fadeInLeft animated',
         confirmBtnClassOnHide: 'fadeOutLeft animated',
-        autoClose: true,
-        autoCloseAfter: 2000, 
+        autoCloseOnTime: true,
+        autoCloseTime: 4000, 
+        autoCloseOnDistance: true,
+        autoCloseDistance: 250,
         onShow: function (e) {},
         onHide: function (e) {},
         onConfirm: function (e) {}
@@ -25,8 +27,6 @@
         this.element = element;
         this.$element = $(element).on('click.bs.confirmit', $.proxy(this.toggle, this));
         this.options = this.getOptions(options);
-
-        this.autoCloseTimer = false;
 
         var $parent = getParent(this.$element);
         $parent.find('.confirmit-confirm').on('click', this.options.onConfirm);
@@ -76,12 +76,14 @@
                 relatedTarget: self.element
             };
 
-            var e = $.Event('show.bs.confirmit', relatedTarget);
-            
+            var e = $.Event('show.bs.confirmit', relatedTarget);         
             $parent.trigger(e);
             self.options.onShow.call(self.element, e);
 
+            // User is able to abort process by preventing default behaviour in event listener.
             if (e.isDefaultPrevented()) return;
+
+            self.$element.focus();
 
             $parent
                 .toggleClass('open')
@@ -108,13 +110,29 @@
 
             }            
 
-            self.$element.focus();
+            // Listen for click event to hide component.
+            $(document).one('click.bs.confirmit', $.proxy(self.hide, self));
 
-            $(document).one('click.bs.confirmit.data-api', $.proxy(self.hide, self));
+            if (self.options.autoCloseOnDistance === true) {
 
-            if (self.options.autoClose === true) {
+
+                // Listen for mouse movements to hide component on given autoCloseDistance.
+                $(document).on('mousemove.bs.confirmit', function (e) {
+
+                    var offset = self.$element.offset();
+                    var distance = delta2d(offset.left, offset.top, e.pageX, e.pageY);
+                
+                    if (distance > self.options.autoCloseDistance) {
+
+                        self.hide();
+                    }
+                });
+            }
+
+            if (self.options.autoCloseOnTime === true) {
             
-                self.autoCloseTimer = setTimeout($.proxy(self.hide, self), self.options.autoCloseAfter);
+                // Set timeout to hide component on given autoCloseTime.
+                self.autoCloseTimer = setTimeout($.proxy(self.hide, self), self.options.autoCloseTime);
             }
         }
 
@@ -141,11 +159,13 @@
             };
 
             var e = $.Event('hide.bs.confirmit', relatedTarget);
-            
             $parent.trigger(e);
             self.options.onHide.call(self.element, e);
 
+            // User is able to abort process by preventing default behaviour in event listener.
             if (e.isDefaultPrevented()) return;
+
+            self.$element.blur();
 
             $parent.removeClass('open').trigger('hidden.bs.confirmit', relatedTarget);
 
@@ -174,16 +194,26 @@
                 $confirm.hide();
             } 
 
-            self.$element.blur();
+            if (self.options.autoCloseOnDistance === true) {
 
-            if (self.autoCloseTimer !== false){
+                $(document).off('mousemove.bs.confirmit');
+            }
+
+            if (self.options.autoCloseOnTime === true){
 
                 clearTimeout(self.autoCloseTimer);
-                self.autoCloseTimer = false;
             }
         }
 
         return false;
+    }
+
+    function delta2d(x1, y1, x2, y2) {
+
+        var deltaX = Math.abs(x1 - x2);
+        var deltaY = Math.abs(y1 - y2);
+
+        return Math.sqrt( Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
     }
 
     function getParent($elem) {
