@@ -1,20 +1,15 @@
 {
   "name": "bootstrap-confirmit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/bzums/bootstrap-confirmit",
   "description": "Inline UI confirmation component for Bootstrap to avoid dialogs etc.",
   "main": [
-    "src/bootstrap-confirmit.js",
+    "src/bootstrap-confirmit.min.js",
     "src/bootstrap-confirmit.css"
   ],
   "dependencies": {
     "bootstrap": "~3.1.1",
     "animate.css": "~3.2.0"
-  },
-  "devDependencies": {
-    "bootstrap": "~3.1.1",
-    "google-code-prettify": "~1.0.1",
-    "qunit": "~1.14.0"
   },
   "ignore": [
     "**/.*",
