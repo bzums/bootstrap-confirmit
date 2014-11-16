@@ -1,0 +1,24 @@
+{
+  "name": "bootstrap-confirmit",
+  "title": "bootstrap-confirmit",
+  "version": "0.0.1",
+  "description": "Inline UI confirmation component for Bootstrap to avoid dialogs etc.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bzums/bootstrap-confirmit.git"
+  },
+  "author": "bzums",
+  "license": "GPL 3.0, MIT",
+  "homepage": "https://github.com/bzums/bootstrap-confirmit/",
+  "download": "http://bzums.github.io/bootstrap-confirmit/src/bootstrap-confirmit.js",
+  "keywords": [
+    "ui",
+    "bootstrap",
+    "confirm",
+    "button"
+  ],
+  "readmeFilename": "README.md",
+  "devDependencies": {
+  },
+  "banner": "/*\n * <%= pkg.name %> v<%= pkg.version %> by <%= pkg.author %>\n * <%= pkg.license.url %>\n */\n"
+}

@@ -1,0 +1,16 @@
+:not(.open) > .confirmit {
+    border-bottom-right-radius: 3px !important;
+    border-top-right-radius: 3px !important;
+}
+
+.confirmit-confirm {
+    display: none;
+}
+
+.confirmit-confirm.animated {
+	z-index: -1;
+}
+
+.animated {
+    animation-duration: 0.2s;
+}
